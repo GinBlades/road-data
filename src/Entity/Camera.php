@@ -27,7 +27,7 @@ class Camera
     private $longitude;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=120, unique=true)
      */
     private $dotId;
 

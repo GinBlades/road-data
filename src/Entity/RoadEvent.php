@@ -47,7 +47,7 @@ class RoadEvent
     private $startDate;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=120, unique=true)
      */
     private $dotId;
 

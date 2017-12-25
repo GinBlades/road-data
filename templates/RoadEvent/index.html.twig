@@ -1,0 +1,71 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+<h1>Events</h1>
+<table>
+    <thead>
+        <tr>
+            <td>ID</td>
+            <td>Last Updated</td>
+            <td>Latitude</td>
+            <td>Longitude</td>
+            <td>Planned End Date</td>
+            <td>reported</td>
+            <td>startDate</td>
+            <td>dotId</td>
+            <td>regionName</td>
+            <td>countyName</td>
+            <td>severity</td>
+            <td>roadwayName</td>
+            <td>directionOfTravel</td>
+            <td>description</td>
+            <td>location</td>
+            <td>lanesAffected</td>
+            <td>lanesStatus</td>
+            <td>lcsEntries</td>
+            <td>navteqLinkId</td>
+            <td>primaryLocation</td>
+            <td>secondaryLocation</td>
+            <td>firstArticleCity</td>
+            <td>secondCity</td>
+            <td>eventType</td>
+            <td>eventSubType</td>
+            <td>mapEncodedPolyline</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for event in events %}
+            <tr>
+                <td>{{ event.id }}</td>
+                <td>{{ event.lastUpdated | date }}</td>
+                <td>{{ event.latitude }}</td>
+                <td>{{ event.longitude }}</td>
+                <td>{{ event.plannedEndDate | date }}</td>
+                <td>{{ event.reported | date }}</td>
+                <td>{{ event.startDate | date }}</td>
+                <td>{{ event.dotId }}</td>
+                <td>{{ event.regionName }}</td>
+                <td>{{ event.countyName }}</td>
+                <td>{{ event.severity }}</td>
+                <td>{{ event.roadwayName }}</td>
+                <td>{{ event.directionOfTravel }}</td>
+                <td>{{ event.description }}</td>
+                <td>{{ event.location }}</td>
+                <td>{{ event.lanesAffected }}</td>
+                <td>{{ event.lanesStatus }}</td>
+                <td>{{ event.lcsEntries }}</td>
+                <td>{{ event.navteqLinkId }}</td>
+                <td>{{ event.primaryLocation }}</td>
+                <td>{{ event.secondaryLocation }}</td>
+                <td>{{ event.firstArticleCity }}</td>
+                <td>{{ event.secondCity }}</td>
+                <td>{{ event.eventType }}</td>
+                <td>{{ event.eventSubType }}</td>
+                <td>{{ event.mapEncodedPolyline }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{{ dump(events) }}
+{% endblock %}
+

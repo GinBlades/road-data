@@ -22,7 +22,7 @@ class WinterRoadCondition
     private $roadCondition;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $areaName;
 

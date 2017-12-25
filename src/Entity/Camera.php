@@ -52,6 +52,16 @@ class Camera
     private $url;
 
     /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $disabled;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $blocked;
+
+    /**
      * @return integer
      */
     public function getId()
@@ -170,5 +180,38 @@ class Camera
     public function setUrl($url)
     {
         $this->url = $url;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getDisabled()
+    {
+        return $this->disabled;
+    }
+
+    /**
+     * @param boolean
+     */
+    public function setDisabled($disabled)
+    {
+        $this->disabled = $disabled;
+    }
+
+
+    /**
+     * @return boolean
+     */
+    public function getBlocked()
+    {
+        return $this->blocked;
+    }
+
+    /**
+     * @param boolean
+     */
+    public function setBlocked($blocked)
+    {
+        $this->blocked = $blocked;
     }
 }

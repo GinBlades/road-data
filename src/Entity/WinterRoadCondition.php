@@ -37,6 +37,11 @@ class WinterRoadCondition
     private $roadwayName;
 
     /**
+     * @ORM\Column(type="datetime")
+     */
+    private $timestamp;
+
+    /**
      * @return integer
      */
     public function getId()
@@ -109,11 +114,52 @@ class WinterRoadCondition
     }
 
     /**
+     * @return \DateTime
+     */
+    public function getTimestamp()
+    {
+        return $this->timestamp;
+    }
+
+    /**
+     * @param string
+     */
+    public function setTimestamp($timestamp)
+    {
+        if (is_string($timestamp)) {
+            $timestamp = $this->dateFromJson($timestamp);
+        }
+
+        $this->timestamp = $timestamp;
+    }
+
+    /**
      * For import from JSON
      * @param string
      */
     public function setCondition($roadCondition)
     {
         $this->roadCondition = $roadCondition;
+    }
+
+    /**
+     * Data will have dates like this:
+     *   "LastUpdated": "18/09/2017 13:38:59",
+     * @param string
+     *
+     * @return \DateTime
+     */
+    public function dateFromJson($dateString)
+    {
+        if (empty($dateString)) {
+            return null;
+        }
+
+        // createFromFormat returns false if dateString does not fit format
+        $properDate = \DateTime::createFromFormat("d/m/Y G:i:s", $dateString);
+        if (!$properDate) {
+            throw new \Exception("Unable to set date from $dateString");
+        }
+        return $properDate;
     }
 }

@@ -53,7 +53,6 @@ class AppImportJsonCommand extends Command
             // 2017_10_01_15_00_03-getevents-f1e4b673bfdf03fa1d761d692ed1271c.json
             $category = $this->getFileCategory($file);
             $output->writeln($file);
-            $output->writeln($category);
             $className = null;
             switch ($category) {
                 case "getevents":
@@ -79,6 +78,11 @@ class AppImportJsonCommand extends Command
             $data = json_decode($content, true);
             foreach ($data as $item) {
                 $obj = new $className();
+                // Winter Road Conditions don't have a nice unique identifier or timestamp,
+                // so this has to be more complicated
+                if ($className == WinterRoadCondition::class) {
+                    $this->setWinterRoadConditions($obj, $item, $file);
+                }
                 foreach ($item as $key => $value) {
                     if (strtolower($key) == "id") {
                         $obj->setDotId($value);
@@ -86,13 +90,38 @@ class AppImportJsonCommand extends Command
                         $obj->{"set".ucfirst($key)}($value);
                     }
                 }
-                $this->em->persist($obj);
+                if ($this->passUniqueCheck($className, $obj)) {
+                    $this->em->persist($obj);
+                }
             }
             $this->em->flush();
             $this->em->clear();
         }
 
         $io->success('Complete');
+    }
+
+    private function passUniqueCheck($className, $obj) {
+        $match = null;
+        if (in_array($className, [Camera::class, RoadAlert::class, RoadEvent::class, Sign::class])) {
+            // check DotID for these classes
+            $match = $this->em->getRepository($className)
+                ->findOneBy(["dotId" => $obj->getDotId()]);
+        } else if (in_array($className, [Roadway::class])) {
+            // check name for these classes
+            $match = $this->em->getRepository($className)
+                ->findOneBy(["name" => $obj->getName()]);
+        } else {
+            // No unique value to check
+            return true;
+        }
+        if ($match) {
+            // It is not unique
+            return false;
+        } else {
+            // Match is null, it is unique
+            return true;
+        }
     }
 
     /**
@@ -109,5 +138,17 @@ class AppImportJsonCommand extends Command
             return false;
         }
         return $parts[1];
+    }
+
+    /**
+     * @param $obj WinterRoadCondition
+     * @param $item array Associative array from JSON data
+     * @param $file filename
+     */
+    private function setWinterRoadConditions($obj, $item, $file)
+    {
+        $dateString = explode("-", $file)[0];
+        $date = \DateTime::createFromFormat("Y_m_d_G_i_s", $dateString);
+        $obj->setTimestamp($date);
     }
 }

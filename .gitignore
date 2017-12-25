@@ -4,8 +4,10 @@
 /public/bundles/
 /var/
 /vendor/
+/data/
 ###< symfony/framework-bundle ###
 
 ###> symfony/web-server-bundle ###
 .web-server-pid
 ###< symfony/web-server-bundle ###
+tags
